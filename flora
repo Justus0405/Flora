@@ -398,8 +398,14 @@ case $1 in
 					CHAT_GET
 				;;
 				"!n" | "!neofetch")
-					echo "$NAME_COLOR$NAME\e[m:\n$(neofetch)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
-				;;
+                                        echo "$NAME_COLOR$NAME\e[m:\n$(echo -n "│" && neofetch --color_blocks off)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+                                ;;
+                                "!f" | "!fastfetch")
+                                        echo "$NAME_COLOR$NAME\e[m:\n$(echo -n "│" && fastfetch)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+                                ;;
+                                "!w" | "!weather")
+                                        echo "$NAME_COLOR$NAME\e[m:\n$(echo -n "│ " && curl -s wttr.in/?0)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+                                ;;
 				"!r" | "!refresh")
 					CHAT_GET
 				;;
