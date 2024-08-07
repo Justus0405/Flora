@@ -68,15 +68,15 @@ COMPORT_HEARTBEAT() {
 WRITE_MOTD() {
 	#this shit took way too long. thanks grep and sed
 
-	echo -e -n "---MOTD---\n" >> "$DIRMAIN/server/main.tmp"
+	echo -e -n "───┤ MOTD ├──────────────\n" >> "$DIRMAIN/server/main.tmp"
 	echo -e "" >> "$DIRMAIN/server/main.tmp"
 	$MOTD >> "$DIRMAIN/server/main.tmp"
 	echo -e "" >> "$DIRMAIN/server/main.tmp"
-	echo -e -n "---MOTD END---\n\n" >> "$DIRMAIN/server/main.tmp"
+	echo -e -n "───┤ MOTD END ├──────────\n\n" >> "$DIRMAIN/server/main.tmp"
 
-	if [[ "$(head -n 1 $DIRMAIN/server/main)" == "---MOTD---" ]];
+	if [[ "$(head -n 1 $DIRMAIN/server/main)" == "───┤ MOTD ├──────────────" ]];
 	then
-		sed "1,$(( $(sed '/---MOTD END---/q' $DIRMAIN/server/main | wc -l) + 1 ))d" "$DIRMAIN/server/main" >> "$DIRMAIN/server/main.tmp"
+		sed "1,$(( $(sed '/───┤ MOTD END ├──────────/q' $DIRMAIN/server/main | wc -l) + 1 ))d" "$DIRMAIN/server/main" >> "$DIRMAIN/server/main.tmp"
 	else
 		cat "$DIRMAIN/server/main" >> "$DIRMAIN/server/main.tmp"
 	fi
@@ -101,7 +101,7 @@ MOTD_VIEWER() {
 	then
 		break
 	fi
-	if [[ "$(head -n 1 $DIRMAIN/tmp/main)" == "---MOTD---" ]];
+	if [[ "$(head -n 1 $DIRMAIN/tmp/main)" == "───┤ MOTD ├──────────────" ]];
 	then
 		echo -e "$(sed '/MOTD END/q' $DIRMAIN/tmp/main)\nPress Q to continue..." | less -c -R
 	else
@@ -233,7 +233,7 @@ case $1 in
 			echo -e " you need to run -p/--pass first, to set an encryption password"
 		else
 			echo -e " \e[2;37mStarting in Server Mode...\e[0m"
-			if [[ "$(head -n 1 $DIRMAIN/server/main)" != "---MOTD---" ]];
+			if [[ "$(head -n 1 $DIRMAIN/server/main)" != "───┤ MOTD ├──────────────" ]];
 			then
 				echo -e " \e[2;37mWriting Motd...\e[0m"
 				WRITE_MOTD
