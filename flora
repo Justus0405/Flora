@@ -259,13 +259,26 @@ case $1 in
 					rm "$DIRMAIN/tmp/tmp.gpg"
 					continue
 				else
-					date "+%T | %d.%m.%Y" >> $DIRMAIN/server/main
-					cat $DIRMAIN/tmp/tmp >> $DIRMAIN/server/main
-					echo -e "------------" >> $DIRMAIN/server/main
-					rm "$DIRMAIN/tmp/tmp"
-					rm "$DIRMAIN/tmp/tmp.gpg"
-					ENCRYPT_MAIN
-					COMPORT_HEARTBEAT
+					while IFS= read -r line; do
+							while [ "${#line}" -gt 100 ]; do
+                                                	echo "│ ${line:0:100}" >> "$DIRMAIN/tmp/tmp_converted"
+                                                	line="${line:100}"
+                                        	done
+                                        	echo "│ $line" >> "$DIRMAIN/tmp/tmp_converted"
+                                	done < "$DIRMAIN/tmp/tmp"
+
+                                        echo -e "╭───────────────────────╮" >> $DIRMAIN/server/main
+                                        echo -e "│ "`date "+%T | %d.%m.%Y"`" │" >> $DIRMAIN/server/main
+                                        echo -e "├───────────────────────╯" >> $DIRMAIN/server/main
+                                        cat $DIRMAIN/tmp/tmp_converted  >> $DIRMAIN/server/main
+                                        echo -e "╰───────────────────────╼" >> $DIRMAIN/server/main
+                                        echo -e "" >> $DIRMAIN/server/main
+
+                                        rm "$DIRMAIN/tmp/tmp"
+                                        rm "$DIRMAIN/tmp/tmp_converted"
+                                        rm "$DIRMAIN/tmp/tmp.gpg"
+                                        ENCRYPT_MAIN
+                                        COMPORT_HEARTBEAT
 				fi
 			done &
 
