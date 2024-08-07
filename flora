@@ -126,10 +126,10 @@ WAIT_LOOP() {
 	LOOP_PID=$!
 }
 JOIN_MESSAGE() {
-        echo ">> \e[1;32mUser $NAME_COLOR$NAME\e[1;32m has joined the chat\e[0m << " | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+        echo ">> \e[3;33m$NAME_COLOR$NAME\e[3;33m has joined the chat\e[0m << " | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
 }
 LEAVE_MESSAGE() {
-        echo "<< \e[1;31mUser $NAME_COLOR$NAME\e[1;31m has left the chat\e[0m >> " | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+        echo "<< \e[3;31m$NAME_COLOR$NAME\e[3;31m has left the chat\e[0m >> " | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
 }
 CONTROLS_HELP() {
 	printf "\e[s"
