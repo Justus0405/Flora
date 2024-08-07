@@ -16,10 +16,10 @@ HELPER() {
 	echo -e ""
 }
 ABOUT() {
-	echo -e " \e[1;35mFlora [v0.2]\e[m"
+	echo -e " \e[1;35mFlora [v0.2]\e[0m"
 	echo -e " By Tina_lel"
 	echo -e " Special Thanks:"
-	echo -e "	\e[0;35mJustus0405\e[m"
+	echo -e "	\e[0;35mJustus0405\e[0m"
 	echo -e ""
 	echo -e " GitHub: https://github.com/Tina-lel/Flora"
 	echo -e ""
@@ -37,19 +37,19 @@ GENERAL_CONFIGURATION() {
 		touch "$DIRMAIN/client.cfg"
 		echo -e "# SERVER CONFIG\n\nOPORT=\"1234\"\nIPORT=\"1235\"\nCOMPORT=\"1236\"\n\nMOTD=\"cat \$DIRMAIN/server/motd\"" > "$DIRMAIN/server.cfg"
 		echo -e "# GENERAL CONFIG\nNAME=\"User\"\nNAME_COLOR=\"\\\e[1;34m\"\nACCENT_COLOR=\"\\\e[7;32m\"\n\n# KEYBINDS\nUP=\"w\"\nDOWN=\"s\"\n\n# MISC CONFIG\nSOCAT_INTERVAL=\"0.25\"\n\n# SERVER CONFIG\nFUNCS=( )\n" > "$DIRMAIN/client.cfg"
-		echo -e "Welcome to \\\e[1;35mFlora\\\e[m" > "$DIRMAIN/server/motd"
+		echo -e "Welcome to \\\e[1;35mFlora\\\e[0m" > "$DIRMAIN/server/motd"
 	fi
 }
 LOGO() {
 	echo -e ""
-	echo -e "       \e[1;35mFlora\e[m"
+	echo -e "       \e[1;35mFlora\e[0m"
 	echo -e "    by Tina_lel   \n"
 }
 
 # SERVER FUNCS
 
 LOAD_SERVER_CONFIG() {
-	echo -e " \e[2;37mLoading Config $DIRMAIN/server.cfg...\e[m"
+	echo -e " \e[2;37mLoading Config $DIRMAIN/server.cfg...\e[0m"
 	source "$DIRMAIN/server.cfg"
 }
 ENCRYPT_MAIN() {
@@ -91,7 +91,7 @@ SERVER_EXITER() {
 # CLIENT FUNCS
 
 LOAD_CLIENT_CONFIG() {
-	echo -e " \e[2;37mLoading Config $DIRMAIN/client.cfg...\e[m"
+	echo -e " \e[2;37mLoading Config $DIRMAIN/client.cfg...\e[0m"
 	source "$DIRMAIN/client.cfg"
 }
 MOTD_VIEWER() {
@@ -134,7 +134,7 @@ LEAVE_MESSAGE() {
 CONTROLS_HELP() {
 	printf "\e[s"
 	printf "\e[9999;0H"
-	printf "${ACCENT_COLOR}| $UP: up | $DOWN: down |\e[m"
+	printf "${ACCENT_COLOR}| $UP: up | $DOWN: down |\e[0m"
 	printf "\e[u"
 }
 MENU_TEST() {
@@ -151,7 +151,7 @@ MENU_TEST() {
 	printf "\e[u"
 
 	LINE=0
-	printf "\e[2K\e[100D > ${ACCENT_COLOR} ${FUNCTIONS[$LINE]} \e[m"
+	printf "\e[2K\e[100D > ${ACCENT_COLOR} ${FUNCTIONS[$LINE]} \e[0m"
 	CONTROLS_HELP
 	while :
 	do
@@ -165,7 +165,7 @@ MENU_TEST() {
 				printf "\e[2K\e[100D${FUNCTIONS[$LINE]}"
 				printf "\e[A"
 				LINE=$(( $LINE - 1 ))
-				printf "\e[2K\e[100D > ${ACCENT_COLOR} ${FUNCTIONS[$LINE]} \e[m"
+				printf "\e[2K\e[100D > ${ACCENT_COLOR} ${FUNCTIONS[$LINE]} \e[0m"
 			fi
 		;;
 		$DOWN)
@@ -176,7 +176,7 @@ MENU_TEST() {
 				printf "\e[2K\e[100D${FUNCTIONS[$LINE]}"
 				printf "\n"
 				LINE=$(( $LINE + 1 ))
-				printf "\e[2K\e[100D > ${ACCENT_COLOR} ${FUNCTIONS[$LINE]} \e[m"
+				printf "\e[2K\e[100D > ${ACCENT_COLOR} ${FUNCTIONS[$LINE]} \e[0m"
 			fi
 		;;
 		"")
@@ -217,7 +217,7 @@ case $1 in
 	;;
 	-p | --pass)
 		echo -e "set an encryption password for the server"
-		echo -e -n "\e[1;32mPassword >>\e[m "
+		echo -e -n "\e[1;32mPassword >>\e[0m "
 		read -r -e PASS
 		echo -e $PASS > $DIRMAIN/server/pass
 		echo -e "saved Password to \"$DIRMAIN/server/pass\" IN PLAINTEXT!!!"
@@ -232,10 +232,10 @@ case $1 in
 		then
 			echo -e " you need to run -p/--pass first, to set an encryption password"
 		else
-			echo -e " \e[2;37mStarting in Server Mode...\e[m"
+			echo -e " \e[2;37mStarting in Server Mode...\e[0m"
 			if [[ "$(head -n 1 $DIRMAIN/server/main)" != "---MOTD---" ]];
 			then
-				echo -e " \e[2;37mWriting Motd...\e[m"
+				echo -e " \e[2;37mWriting Motd...\e[0m"
 				WRITE_MOTD
 			fi
 			if [[ ! -f "$DIRMAIN/server/main.gpg" ]];
@@ -244,11 +244,11 @@ case $1 in
 			fi
 
 			#OUTPUT
-			echo -e " \e[2;37mStarting output thread...\e[m"
+			echo -e " \e[2;37mStarting output thread...\e[0m"
 			socat -d0 -U tcp-l:$OPORT,fork,reuseaddr,reuseport open:"$DIRMAIN/server/main.gpg" &
 
 			#INPUT
-			echo -e " \e[2;37mStarting input thread...\e[m"
+			echo -e " \e[2;37mStarting input thread...\e[0m"
 			while :
 			do
 				socat -d0 -u tcp-l:$IPORT,reuseaddr,reuseport open:"$DIRMAIN/tmp/tmp.gpg",creat || break
@@ -303,7 +303,7 @@ case $1 in
 					;;
 					motd)
 						LOAD_SERVER_CONFIG
-						echo -e " \e[2;37mWriting Motd...\e[m"
+						echo -e " \e[2;37mWriting Motd...\e[0m"
 						WRITE_MOTD
 						ENCRYPT_MAIN
 						COMPORT_HEARTBEAT
@@ -366,7 +366,7 @@ case $1 in
 				break
 			done
 
-			echo -e -n "\e[1;32mPassword for $HOST >>\e[m "
+			echo -e -n "\e[1;32mPassword for $HOST >>\e[0m "
 			read -s -r -e PASS
 
 			trap "CLIENT_EXITER" SIGINT
@@ -398,13 +398,13 @@ case $1 in
 					CHAT_GET
 				;;
 				"!n" | "!neofetch")
-                                        echo "$NAME_COLOR$NAME\e[m:\n$(echo -n "│" && neofetch --color_blocks off)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+                                        echo "$NAME_COLOR$NAME\e[0m:\n$(echo -n "│" && neofetch --color_blocks off)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
                                 ;;
                                 "!f" | "!fastfetch")
-                                        echo "$NAME_COLOR$NAME\e[m:\n$(echo -n "│" && fastfetch)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+                                        echo "$NAME_COLOR$NAME\e[0m:\n$(echo -n "│" && fastfetch)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
                                 ;;
                                 "!w" | "!weather")
-                                        echo "$NAME_COLOR$NAME\e[m:\n$(echo -n "│ " && curl -s wttr.in/?0)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+                                        echo "$NAME_COLOR$NAME\e[0m:\n$(echo -n "│ " && curl -s wttr.in/?0)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
                                 ;;
 				"!r" | "!refresh")
 					CHAT_GET
@@ -428,7 +428,7 @@ case $1 in
 					echo -e "Sending..."
 					while :
 					do
-						echo "$NAME_COLOR$NAME\e[m: $MSG" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+						echo "$NAME_COLOR$NAME\e[0m: $MSG" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
 						SOCAT_FAIL="$?"
 						if [[ $SOCAT_FAIL != 0 ]];
 						then
