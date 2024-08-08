@@ -259,13 +259,22 @@ case $1 in
 					rm "$DIRMAIN/tmp/tmp.gpg"
 					continue
 				else
-					while IFS= read -r line; do
-							while [ "${#line}" -gt 100 ]; do
-                                                	echo "│ ${line:0:100}" >> "$DIRMAIN/tmp/tmp_converted"
-                                                	line="${line:100}"
-                                        	done
-                                        	echo "│ $line" >> "$DIRMAIN/tmp/tmp_converted"
-                                	done < "$DIRMAIN/tmp/tmp"
+					while IFS= read -r line || [ -n "$line" ]; do
+
+                                                while [[ "$line" =~ \\n ]]; do
+                                                        part="${line%%\\n*}"
+                                                        rest="${line#*\\n}"
+                                                        echo "│ $part" >> "$DIRMAIN/tmp/tmp_converted"
+                                                        line="$rest"
+                                                done
+
+                                                while [ "${#line}" -gt 100 ]; do
+                                                        echo "│ ${line:0:100}" >> "$DIRMAIN/tmp/tmp_converted"
+                                                        line="${line:100}"
+                                                done
+
+                                                echo "│ $line" >> "$DIRMAIN/tmp/tmp_converted"
+                                        done < "$DIRMAIN/tmp/tmp"
 
                                         echo -e "╭───────────────────────╮" >> $DIRMAIN/server/main
                                         echo -e "│ "`date "+%T | %d.%m.%Y"`" │" >> $DIRMAIN/server/main
@@ -398,13 +407,13 @@ case $1 in
 					CHAT_GET
 				;;
 				"!n" | "!neofetch")
-                                        echo "$NAME_COLOR$NAME\e[0m:\n$(echo -n "│" && neofetch --color_blocks off)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+                                        echo "$NAME_COLOR$NAME\e[0m:\n$(neofetch --color_blocks off)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
                                 ;;
                                 "!f" | "!fastfetch")
-                                        echo "$NAME_COLOR$NAME\e[0m:\n$(echo -n "│" && fastfetch)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+                                        echo "$NAME_COLOR$NAME\e[0m:\n$(fastfetch)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
                                 ;;
                                 "!w" | "!weather")
-                                        echo "$NAME_COLOR$NAME\e[0m:\n$(echo -n "│ " && curl -s wttr.in/?0)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
+                                        echo "$NAME_COLOR$NAME\e[0m:\n$(curl -s wttr.in/?0)" | gpg -c --cipher-algo AES256 --batch --yes --passphrase $PASS - | socat -U tcp:$HOST:$IPORT -
                                 ;;
 				"!r" | "!refresh")
 					CHAT_GET
